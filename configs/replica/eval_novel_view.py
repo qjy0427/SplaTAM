@@ -2,12 +2,18 @@ import os
 from os.path import join as p_join
 
 scenes = ["room0", "room1", "room2",
-          "office0", "office1", "office2",
-          "office_", "office4"]
+          "office_0", "office_1", "office_2",
+          "office_3", "office_4"]
 
 primary_device="cuda:0"
 seed = 0
 scene_name = scenes[0]
+
+# # SLAM
+# use_train_split = True
+
+# Novel View Synthesis
+use_train_split = False
 
 map_every = 1
 keyframe_every = 5
@@ -42,19 +48,20 @@ config = dict(
         project="SplaTAM",
         group=group_name,
         name=run_name,
-        save_qual=True,
+        save_qual=False,
         eval_save_qual=True,
     ),
     data=dict(
         basedir="./data/Replica",
         gradslam_data_cfg="./configs/data/replica.yaml",
         sequence=scene_name,
+        use_train_split=use_train_split,
         desired_image_height=680,
         desired_image_width=1200,
         start=0,
-        end=100,
+        end=-1,
         stride=1,
-        num_frames=100,
+        num_frames=-1,
     ),
     tracking=dict(
         use_gt_poses=False, # Use GT Poses for Tracking
@@ -64,6 +71,9 @@ config = dict(
         sil_thres=0.99,
         use_l1=True,
         ignore_outlier_depth_loss=False,
+        use_uncertainty_for_loss_mask=False,
+        use_uncertainty_for_loss=False,
+        use_chamfer=False,
         loss_weights=dict(
             im=0.5,
             depth=1.0,
@@ -83,8 +93,11 @@ config = dict(
         add_new_gaussians=True,
         sil_thres=0.5, # For Addition of new Gaussians
         use_l1=True,
-        use_sil_for_loss=False,
         ignore_outlier_depth_loss=False,
+        use_sil_for_loss=False,
+        use_uncertainty_for_loss_mask=False,
+        use_uncertainty_for_loss=False,
+        use_chamfer=False,
         loss_weights=dict(
             im=0.5,
             depth=1.0,
@@ -133,4 +146,5 @@ config = dict(
         viz_fps=5, # FPS for Online Recon Viz
         enter_interactive_post_online=True, # Enter Interactive Mode after Online Recon Viz
     ),
+    scene_path='./experiments/Replica/room0_0/params.npz',
 )

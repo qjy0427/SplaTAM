@@ -44,11 +44,11 @@ config = dict(
     checkpoint_interval=100, # Checkpoint Interval
     use_wandb=True,
     wandb=dict(
-        entity="theairlab",
+        entity="qiujingye",
         project="SplaTAM",
         group=group_name,
         name=run_name,
-        save_qual=False,
+        save_qual=True,
         eval_save_qual=True,
     ),
     data=dict(
